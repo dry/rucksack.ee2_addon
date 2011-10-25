@@ -87,7 +87,7 @@ class Rucksack_ext {
 		// Add Code for the sessions_start hook here.  
 		session_start();
 		register_shutdown_function('ob_end_flush');
-		ob_start(array($this, 'buffer_handler'));
+		ob_start(array($this, 'buffer_handler'), $chunk_size = 0, $erase = TRUE);
 	}
 
 	// ----------------------------------------------------------------------
@@ -100,16 +100,17 @@ class Rucksack_ext {
 	 */
 	public function buffer_handler($buffer)
 	{
-		preg_match_all('/{rucksack:([a-z]+)}/U', $buffer, $matches, PREG_SET_ORDER);
+		$pattern = '/{rucksack:get\s+key=[\'"](.+)[\'"]}/U';
+		$count = preg_match_all($pattern, $buffer, $matches, PREG_SET_ORDER);
 
-		if (isset($matches))
+		if ($count)
 		{
 			$key = $matches[0][1];
-			$matches[0][2] = $_SESSION['RUCKSACK'][$key];
-			$buffer = str_replace($matches[0][0], $matches[0][2], $buffer);
+			$value = $_SESSION['RUCKSACK'][$key];
+			$buffer = str_replace($matches[0][0], $value, $buffer);
 
 			$cond = array();
-			$cond['rucksack:'.$matches[0][1]] = TRUE;
+			$cond['rucksack:'.$key] = TRUE;
 			$this->EE->functions->prep_conditionals($buffer, $cond);
 		}
 
