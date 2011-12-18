@@ -1,38 +1,55 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-/**
- * ExpressionEngine - by EllisLab
- *
- * @package		ExpressionEngine
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2003 - 2011, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
- * @since		Version 2.0
- * @filesource
- */
- 
-// ------------------------------------------------------------------------
-
 /**
  * Rucksack Extension
  *
  * @package		ExpressionEngine
  * @subpackage	Addons
  * @category	Extension
- * @author		Greg Salt
- * @link		http://drylouvre.com
+ * @author		Greg Salt <greg@purple-dogfish.co.uk>
+ * @link		http://purple-dogfish.co.uk
  */
-
 class Rucksack_ext {
 	
-	public $settings 		= array();
-	public $description		= 'Rucksack';
-	public $docs_url		= '';
-	public $name			= 'Rucksack';
-	public $settings_exist	= 'n';
-	public $version			= '1.0';
+	/**
+	 * @access	public
+	 * @var		array
+	 */
+	public $settings = array();
+
+	/**
+	 * @access	public
+	 * @var		string
+	 */
+	public $description = 'Rucksack';
+
+	/**
+	 * @access	public
+	 * @var		string
+	 */
+	public $docs_url = '';
+
+	/**
+	 * @access	public
+	 * @var		string
+	 */
+	public $name = 'Rucksack';
+
+	/**
+	 * @access	public
+	 * @var		string
+	 */
+	public $settings_exist = 'n';
+
+	/**
+	 * @access	public
+	 * @var		string
+	 */
+	public $version	= '1.0';
 	
+	/**
+	 * @access	private
+	 * @var		ExpressionEngine
+	 */
 	private $EE;
 	
 	/**
@@ -44,21 +61,16 @@ class Rucksack_ext {
 	{
 		$this->EE =& get_instance();
 		$this->settings = $settings;
-	}// ----------------------------------------------------------------------
-	
+	}
+
 	/**
 	 * Activate Extension
 	 *
-	 * This function enters the extension into the exp_extensions table
-	 *
-	 * @see http://codeigniter.com/user_guide/database/index.html for
-	 * more information on the db class.
-	 *
-	 * @return void
+	 * @access	public
+	 * @return	void
 	 */
 	public function activate_extension()
 	{
-		// Setup custom settings in this array.
 		$this->settings = array();
 		
 		$data = array(
@@ -71,31 +83,27 @@ class Rucksack_ext {
 		);
 
 		$this->EE->db->insert('extensions', $data);			
-		
 	}	
-
-	// ----------------------------------------------------------------------
 
 	/**
 	 * sessions_start
 	 *
-	 * @param 
-	 * @return 
+	 * @access	public
+	 * @param	object	Session
+	 * @return	void 
 	 */
-	public function sessions_start()
+	public function sessions_start(&$session)
 	{
-		// Add Code for the sessions_start hook here.  
 		session_start();
 		register_shutdown_function('ob_end_flush');
 		ob_start(array($this, 'buffer_handler'), $chunk_size = 0, $erase = TRUE);
 	}
 
-	// ----------------------------------------------------------------------
-
 	/**
 	 * buffer_handler
 	 *
 	 * @access	public
+	 * @param	string	Output buffer
 	 * @return	string
 	 */
 	public function buffer_handler($buffer)
@@ -117,14 +125,11 @@ class Rucksack_ext {
 		return $buffer;
 	}
 	
-	// ----------------------------------------------------------------------
-
 	/**
 	 * Disable Extension
 	 *
-	 * This method removes information from the exp_extensions table
-	 *
-	 * @return void
+	 * @access	public
+	 * @return	void
 	 */
 	function disable_extension()
 	{
@@ -132,15 +137,11 @@ class Rucksack_ext {
 		$this->EE->db->delete('extensions');
 	}
 
-	// ----------------------------------------------------------------------
-
 	/**
 	 * Update Extension
 	 *
-	 * This function performs any necessary db updates when the extension
-	 * page is visited
-	 *
-	 * @return 	mixed	void on update / false if none
+	 * @access	public
+	 * @return 	mixed	Void on update / false if none
 	 */
 	function update_extension($current = '')
 	{
@@ -149,8 +150,6 @@ class Rucksack_ext {
 			return FALSE;
 		}
 	}	
-	
-	// ----------------------------------------------------------------------
 }
 
 /* End of file ext.rucksack.php */
