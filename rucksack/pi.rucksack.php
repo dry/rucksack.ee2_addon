@@ -1,41 +1,30 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-/**
- * ExpressionEngine - by EllisLab
- *
- * @package		ExpressionEngine
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2003 - 2011, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
- * @since		Version 2.0
- * @filesource
- */
- 
-// ------------------------------------------------------------------------
-
 /**
  * Rucksack Plugin
  *
  * @package		ExpressionEngine
  * @subpackage	Addons
  * @category	Plugin
- * @author		Greg Salt
- * @link		http://drylouvre.com
+ * @author		Greg Salt <greg@purple-dogfish.co.uk>
+ * @link		http://purple-dogfish.co.uk
  */
 
 $plugin_info = array(
-	'pi_name'		=> 'Rucksack',
-	'pi_version'	=> '1.0',
-	'pi_author'		=> 'Greg Salt',
-	'pi_author_url'	=> 'http://drylouvre.com',
+	'pi_name' => 'Rucksack',
+	'pi_version' => '1.0',
+	'pi_author'	=> 'Greg Salt',
+	'pi_author_url'	=> 'http://purple-dogfish.co.uk',
 	'pi_description'=> 'Rucksack',
-	'pi_usage'		=> Rucksack::usage()
+	'pi_usage' => Rucksack::usage()
 );
 
 
 class Rucksack {
 
+	/**
+	 * @access	public
+	 * @var		string
+	 */
 	public $return_data;
     
 	/**
@@ -46,8 +35,12 @@ class Rucksack {
 		$this->EE =& get_instance();
 	}
 	
-	// ----------------------------------------------------------------
-	
+	/**
+	 * Store
+	 *
+	 * @access	public
+	 * @return	void
+	 */
 	public function store()
 	{
 		$key = $this->EE->TMPL->fetch_param('key');
@@ -56,18 +49,24 @@ class Rucksack {
 		$_SESSION['RUCKSACK'][$key] = $data;
 	}
 
-	// ----------------------------------------------------------------
-
 	/**
 	 * Plugin Usage
+	 *
+	 * @access	public
+	 * @return	string
 	 */
 	public static function usage()
 	{
 		ob_start();
-?>
+		?>
+Store any data across page requests:
+{exp:rucksack:store key="any_unique_key"}
+...your data...
+{/exp:rucksack:store}
 
- Since you did not provide instructions on the form, make sure to put plugin documentation here.
-<?php
+Output that data again with:
+{exp:rucksack:get key="the_unique_key"}
+		<?php
 		$buffer = ob_get_contents();
 		ob_end_clean();
 		return $buffer;
